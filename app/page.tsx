@@ -490,7 +490,7 @@ export default function Home() {
             </h2>
           </div>
           <p>
-            These are short, recruiter-friendly summaries of the work. Some details stay abstract because the products
+            Some details stay abstract because the products
             are confidential, but the scope, role, and outcomes are clear.
           </p>
         </div>
