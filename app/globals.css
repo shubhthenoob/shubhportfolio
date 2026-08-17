@@ -204,9 +204,9 @@ main > *:not(.dot-field):not(.cursor-background) {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   gap: clamp(36px, 6vw, 84px);
-  align-items: center;
+  align-items: start;
   min-height: 100svh;
-  padding-top: 130px;
+  padding-top: 100px;
   padding-bottom: 64px;
 }
 
