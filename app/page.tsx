@@ -71,7 +71,7 @@ const projects = [
 const journey = [
   {
     year: 'Now',
-    title: 'Product Manager, Taabi Mobility',
+    title: 'Product Manager (GET), Taabi Mobility',
     copy:
       'Building enterprise software for logistics operations, with a focus on workflow clarity, product judgment, and shipping useful systems.',
   },
