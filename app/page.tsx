@@ -12,9 +12,9 @@ const navItems = [
 ]
 
 const proofPoints = [
-  { value: '0-1', label: 'enterprise workflows shaped and shipped' },
-  { value: '42+', label: 'routes optimized through product decisions' },
-  { value: 'Hours', label: 'instead of days for procurement cycles' },
+  { value: '₹3L+', label: 'monthly recurring revenue from my agency' },
+  { value: '0 → 1', label: 'enterprise products built and shipped' },
+  { value: '25+', label: 'client requirements turned into shipped features' },
 ]
 
 const projects = [
