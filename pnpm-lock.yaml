@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  hono: 4.12.25
+
 importers:
 
   .:
@@ -259,7 +262,7 @@ packages:
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
     engines: {node: '>=20'}
     peerDependencies:
-      hono: ^4
+      hono: 4.12.25
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -1091,8 +1094,8 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
-  hono@4.13.2:
-    resolution: {integrity: sha512-JydRilDRkYBQMt9qR9U92mXxmbGqsqSn/IKOrh4e7/gEbn+0zSr8igTu0obwJoNGN4sez28DIql7FBHWydoJpA==}
+  hono@4.12.25:
+    resolution: {integrity: sha512-2NFaIyNVgJmBs/ecmtGzlmluTFs5cHEWGTdu0t1HBwYzoGXOL5nUQBRMXsXWla5i4KkG//QMzVP88m1+I3fdAQ==}
     engines: {node: '>=16.9.0'}
 
   http-errors@2.0.1:
@@ -2173,9 +2176,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@hono/node-server@2.1.1(hono@4.13.2)':
+  '@hono/node-server@2.1.1(hono@4.12.25)':
     dependencies:
-      hono: 4.13.2
+      hono: 4.12.25
 
   '@img/colour@1.1.0':
     optional: true
@@ -2305,7 +2308,7 @@ snapshots:
 
   '@modelcontextprotocol/sdk@1.30.0(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 2.1.1(hono@4.13.2)
+      '@hono/node-server': 2.1.1(hono@4.12.25)
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       content-type: 1.0.5
@@ -2315,7 +2318,7 @@ snapshots:
       eventsource-parser: 3.1.1
       express: 5.2.1
       express-rate-limit: 8.6.2(express@5.2.1)
-      hono: 4.13.2
+      hono: 4.12.25
       jose: 6.2.9
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
@@ -2881,7 +2884,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.13.2: {}
+  hono@4.12.25: {}
 
   http-errors@2.0.1:
     dependencies:
