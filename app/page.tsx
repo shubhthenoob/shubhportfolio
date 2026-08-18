@@ -117,6 +117,11 @@ const builds = [
     title: 'Turn rushed English into polished professional writing.',
     copy:
       'An AI writing assistant that rewrites broken, rushed, or fast English into clearer professional communication without changing the original meaning.',
+    example: {
+      before: 'hey sorry cant send the report today, some issue came in the data, pls give time till tmrw',
+      after:
+        'Hi, apologies for the delay. I ran into a data issue while preparing the report and would like to share it with you by tomorrow instead.',
+    },
     href: 'https://chromewebstore.google.com/detail/corporatify/mkhblilbfelnokifpjjmdplonolmldhm',
     cta: 'View Corporatify',
     opensWorkflow: false,
@@ -694,6 +699,21 @@ export default function Home() {
                   <span className="workflow-scroll-hint" aria-hidden="true">
                     Swipe to follow the flow →
                   </span>
+                </div>
+              ) : null}
+              {'example' in build && build.example ? (
+                <div className="build-example">
+                  <div className="build-example-row">
+                    <span className="build-example-tag">Rushed</span>
+                    <p className="build-example-text">{build.example.before}</p>
+                  </div>
+                  <span className="build-example-arrow" aria-hidden="true">
+                    Corporatify
+                  </span>
+                  <div className="build-example-row is-after">
+                    <span className="build-example-tag">Polished</span>
+                    <p className="build-example-text">{build.example.after}</p>
+                  </div>
                 </div>
               ) : null}
               {build.opensWorkflow ? null : (
