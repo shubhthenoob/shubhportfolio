@@ -307,6 +307,13 @@ main > * {
   padding: 18px;
 }
 
+/* % width keeps every card the same size AND keeps the svg anchor points
+   inside the cards at any container width */
+.constellation-card {
+  width: 34%;
+  max-width: 240px;
+}
+
 .constellation-card span,
 .constellation-center small {
   display: block;
@@ -325,25 +332,30 @@ main > * {
   line-height: 1;
 }
 
+/* the three cards sit around the hub; .constellation-svg paths key off these % */
 .constellation-card-a {
-  top: 12%;
-  left: 9%;
+  top: 8%;
+  left: 7%;
 }
 
 .constellation-card-b {
-  top: 48%;
-  left: 12%;
+  bottom: 9%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .constellation-card-c {
-  top: 18%;
-  right: 8%;
+  top: 8%;
+  right: 7%;
 }
 
 .constellation-center {
-  right: 11%;
-  bottom: 12%;
-  max-width: 210px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42%;
+  max-width: 250px;
+  text-align: center;
   background: var(--foreground);
   color: var(--soft-ink);
 }
@@ -362,7 +374,8 @@ main > * {
 .constellation-svg path {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 1.4;
+  /* non-scaling-stroke keeps this even under the squashed viewBox */
+  stroke-width: 1.4px;
   stroke-linecap: round;
   stroke-dasharray: 6 8;
   opacity: 0.65;
@@ -1360,6 +1373,8 @@ main > * {
   }
 
   .constellation-card {
+    width: auto;
+    max-width: none;
     padding: 14px;
   }
 
@@ -1370,7 +1385,9 @@ main > * {
 
   .constellation-card-b {
     top: 32%;
+    bottom: auto;
     left: 8%;
+    transform: none;
   }
 
   .constellation-card-c {
@@ -1379,10 +1396,13 @@ main > * {
   }
 
   .constellation-center {
+    top: auto;
     left: 8%;
     right: 8%;
     bottom: 7%;
+    width: auto;
     max-width: none;
+    transform: none;
   }
 
   .constellation-svg {

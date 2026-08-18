@@ -14,7 +14,7 @@ const navItems = [
 const proofPoints = [
   { value: '₹3L+', label: 'monthly recurring revenue from my agency' },
   { value: '0 → 1', label: 'enterprise products built and shipped' },
-  { value: '25+', label: 'client requirements turned into shipped features' },
+  { value: '15+', label: 'clients onboarded' },
 ]
 
 const projects = [
@@ -305,10 +305,11 @@ function StoryConstellation() {
         <small>Connecting the dots</small>
         <b>Product management</b>
       </div>
-      <svg viewBox="0 0 420 320" className="constellation-svg">
-        <path d="M48 250 C120 160, 160 120, 215 150" />
-        <path d="M215 150 C265 175, 310 130, 360 78" />
-        <path d="M215 150 C270 205, 300 232, 358 245" />
+      {/* percentage coordinate space so the paths track the cards, which are positioned in % */}
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="constellation-svg">
+        <path d="M24 17 C 31 28, 38 34, 48 45" vectorEffect="non-scaling-stroke" />
+        <path d="M76 17 C 69 28, 62 34, 52 45" vectorEffect="non-scaling-stroke" />
+        <path d="M50 79 C 50 72, 50 64, 50 57" vectorEffect="non-scaling-stroke" />
       </svg>
     </div>
   )
