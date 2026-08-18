@@ -89,7 +89,7 @@ const journey = [
   },
   {
     year: '2023',
-    title: 'Founder's Office Intern, CitJo',
+    title: "Founder's Office Intern, CitJo",
     copy:
       'Basically did everything from bringing coffee to being part of investor meeting.',
   },
