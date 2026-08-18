@@ -373,42 +373,105 @@ function ProjectVisual({ type }: { type: string }) {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [isCompact, setIsCompact] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
+    let frame = 0
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        setScrolled(window.scrollY > 24)
+      })
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [])
+
+  // The nav collapses into a panel below this width, so track it to keep the
+  // closed panel out of the tab order and to close on rotate / resize up.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 980px)')
+    const sync = () => {
+      setIsCompact(mq.matches)
+      if (!mq.matches) setMenuOpen(false)
+    }
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    // Lock on <html>, not <body>: `html { overflow-x: hidden }` makes the root
+    // the scroll container, so body overflow no longer propagates to the viewport.
+    const root = document.documentElement
+    const previousOverflow = root.style.overflow
+    root.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      root.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [menuOpen])
+
+  const panelHidden = isCompact && !menuOpen
 
   return (
     <main>
       <DotField />
       <CursorGlow />
 
-      <nav className={`site-nav ${scrolled ? 'site-nav-scrolled' : ''}`} aria-label="Main navigation">
-        <a className="wordmark" href="#top">
+      <nav
+        className={`site-nav ${scrolled ? 'site-nav-scrolled' : ''} ${menuOpen ? 'site-nav-open' : ''}`}
+        aria-label="Main navigation"
+      >
+        <a className="wordmark" href="#top" onClick={() => setMenuOpen(false)}>
           SHUBH <span>RADIA</span>
         </a>
-        <div className={`nav-links ${menuOpen ? 'nav-links-open' : ''}`}>
+        <div
+          id="site-nav-links"
+          className={`nav-links ${menuOpen ? 'nav-links-open' : ''}`}
+          inert={panelHidden || undefined}
+        >
           {navItems.map((item) => (
             <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
               {item.label}
             </a>
           ))}
+          <a className="nav-panel-cta" href="mailto:shubhradia33@gmail.com" onClick={() => setMenuOpen(false)}>
+            Email me
+          </a>
         </div>
         <a className="nav-cta" href="mailto:shubhradia33@gmail.com">
           Email me
         </a>
         <button
           className="menu-button"
-          onClick={() => setMenuOpen(!menuOpen)}
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuOpen}
-          aria-label="Toggle navigation"
+          aria-controls="site-nav-links"
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
         >
           <span />
           <span />
         </button>
       </nav>
+      <button
+        type="button"
+        className={`nav-scrim ${menuOpen ? 'nav-scrim-open' : ''}`}
+        onClick={() => setMenuOpen(false)}
+        tabIndex={-1}
+        aria-hidden="true"
+      />
 
       <section className="hero section-pad" id="top">
         <div className="hero-copy">
@@ -590,39 +653,49 @@ export default function Home() {
               <h3>{build.title}</h3>
               <p>{build.copy}</p>
               {'workflowSteps' in build && build.workflowSteps ? (
-  <div className="build-workflow-canvas">
-    <div className="workflow-grid" />
+                <div className="build-workflow-wrap">
+                  <div
+                    className="build-workflow-canvas"
+                    role="group"
+                    aria-label="Newsletter automation workflow, scroll horizontally to see every step"
+                    tabIndex={0}
+                  >
+                    <div className="workflow-grid" />
 
-    <div className="workflow-flow">
-      {build.workflowSteps.map((step, index) => (
-        <div key={step} className="workflow-group">
-          <div className="workflow-node">
-            <div className="workflow-node-icon">
-              {step === 'Send Newsletter' ? '✉' :
-               step === 'Record Processed Article' ? '▦' :
-               step === 'Analyze Articles' ? '☷' : '{}'}
-            </div>
-          </div>
+                    <div className="workflow-flow">
+                      {build.workflowSteps.map((step, index) => (
+                        <div key={step} className="workflow-group">
+                          <div className="workflow-node">
+                            <div className="workflow-node-icon">
+                              {step === 'Send Newsletter'
+                                ? '✉'
+                                : step === 'Record Processed Article'
+                                  ? '▦'
+                                  : step === 'Analyze Articles'
+                                    ? '☷'
+                                    : '{}'}
+                            </div>
+                          </div>
 
-          <span className="workflow-node-title">
-            {step}
-          </span>
+                          <span className="workflow-node-title">{step}</span>
 
-          {step === 'Analyze Articles' && (
-            <div className="workflow-subnodes">
-              <span>Model</span>
-              <span>Output Parser</span>
-            </div>
-          )}
+                          {step === 'Analyze Articles' && (
+                            <div className="workflow-subnodes">
+                              <span>Model</span>
+                              <span>Output Parser</span>
+                            </div>
+                          )}
 
-          {index < build.workflowSteps.length - 1 && (
-            <div className="workflow-connector" />
-          )}
-        </div>
-      ))}
-    </div>
-  </div>
-) : null}
+                          {index < build.workflowSteps.length - 1 && <div className="workflow-connector" />}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <span className="workflow-scroll-hint" aria-hidden="true">
+                    Swipe to follow the flow →
+                  </span>
+                </div>
+              ) : null}
               {build.opensWorkflow ? null : (
                 <a
                   className="build-link"

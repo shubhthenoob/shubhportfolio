@@ -13,6 +13,7 @@
   --ink: #20262c;
   --soft-ink: #f7f3eb;
   --radius: 24px;
+  --nav-h: 78px;
 }
 
 @theme inline {
@@ -30,6 +31,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* stop in-page anchors from landing underneath the fixed nav */
+  scroll-padding-top: calc(var(--nav-h) + 12px);
   background: var(--background);
   overflow-x: hidden;
 }
@@ -117,7 +120,11 @@ h2 em {
   background: radial-gradient(circle 220px at var(--cursor-x) var(--cursor-y), rgba(222, 91, 56, 0.14), transparent 72%);
 }
 
-main > *:not(.dot-field):not(.cursor-background) {
+/* Keep this at low specificity: .dot-field / .cursor-background / .site-nav /
+   .nav-scrim each declare their own position and must be able to override it.
+   The old `:not(.dot-field):not(.cursor-background)` form scored higher than
+   `.site-nav`, which silently forced the fixed nav back into the flow. */
+main > * {
   position: relative;
   z-index: 1;
 }
@@ -130,8 +137,9 @@ main > *:not(.dot-field):not(.cursor-background) {
   grid-template-columns: auto 1fr auto auto;
   gap: 24px;
   align-items: center;
-  height: 78px;
-  padding: 0 clamp(22px, 5vw, 88px);
+  height: var(--nav-h);
+  padding-left: max(clamp(22px, 5vw, 88px), env(safe-area-inset-left));
+  padding-right: max(clamp(22px, 5vw, 88px), env(safe-area-inset-right));
   border-bottom: 1px solid transparent;
   transition: background 0.25s ease, border-color 0.25s ease;
 }
@@ -187,23 +195,31 @@ main > *:not(.dot-field):not(.cursor-background) {
   font-size: 13px;
 }
 
+.nav-links .nav-panel-cta {
+  display: none;
+}
+
 .menu-button {
   display: none;
-  width: 34px;
-  height: 34px;
+  /* 44px keeps the tap target at the platform minimum while the bars stay 22px wide */
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
   border: 0;
   background: transparent;
   padding: 0;
   cursor: pointer;
   position: relative;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .menu-button span {
   display: block;
   position: absolute;
-  left: 0;
-  width: 100%;
+  left: 11px;
+  width: 22px;
   height: 1.5px;
   background: var(--foreground);
   border-radius: 2px;
@@ -211,17 +227,21 @@ main > *:not(.dot-field):not(.cursor-background) {
               top 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.menu-button span:first-child { top: 10px; }
-.menu-button span:last-child  { top: 22px; }
+.menu-button span:first-child { top: 17px; }
+.menu-button span:last-child  { top: 26px; }
 
 .menu-button[aria-expanded="true"] span:first-child {
-  top: 16px;
+  top: 21px;
   transform: rotate(45deg);
 }
 
 .menu-button[aria-expanded="true"] span:last-child {
-  top: 16px;
+  top: 21px;
   transform: rotate(-45deg);
+}
+
+.nav-scrim {
+  display: none;
 }
 
 .hero {
@@ -230,7 +250,8 @@ main > *:not(.dot-field):not(.cursor-background) {
   gap: clamp(36px, 6vw, 84px);
   align-items: start;
   min-height: 100svh;
-  padding-top: 40px;
+  /* the nav is fixed, so the hero has to clear it itself */
+  padding-top: calc(var(--nav-h) + 40px);
   padding-bottom: 64px;
 }
 
@@ -695,11 +716,14 @@ main > *:not(.dot-field):not(.cursor-background) {
 
 .build-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, 1fr), not 1fr: a plain 1fr track floors at the item's min-content,
+     which the wide workflow canvas inflates past the viewport. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 18px;
 }
 
 .build-card {
+  min-width: 0;
   min-height: 300px;
   padding: 28px;
   background: rgba(255, 255, 255, 0.06);
@@ -718,11 +742,29 @@ main > *:not(.dot-field):not(.cursor-background) {
   color: rgba(247, 243, 235, 0.74);
 }
 
+.build-workflow-wrap {
+  position: relative;
+  min-width: 0;
+  margin-top: 34px;
+}
+
+/* Fades the right edge so the cut-off nodes read as "there is more" */
+.build-workflow-wrap::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  width: 46px;
+  border-radius: 0 14px 14px 0;
+  background: linear-gradient(90deg, rgba(17, 19, 21, 0), rgba(17, 19, 21, 0.92));
+  pointer-events: none;
+}
+
 .build-workflow-canvas {
   position: relative;
   width: 100%;
   height: 280px;
-  margin-top: 34px;
   overflow-x: auto;
   overflow-y: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -730,6 +772,35 @@ main > *:not(.dot-field):not(.cursor-background) {
   background: #111315;
   /* prevent this from causing page-level overflow */
   max-width: 100%;
+  /* keep a horizontal swipe in the canvas from scrolling the page or
+     triggering the browser's back-navigation gesture */
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.build-workflow-canvas:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.build-workflow-canvas::-webkit-scrollbar {
+  height: 6px;
+}
+
+.build-workflow-canvas::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.build-workflow-canvas::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.workflow-scroll-hint {
+  display: none;
 }
 
 .workflow-grid {
@@ -744,6 +815,9 @@ main > *:not(.dot-field):not(.cursor-background) {
 }
 
 .workflow-flow {
+  /* node/step geometry lives here so the connector math stays in sync */
+  --wf-group: 120px;
+  --wf-node: 64px;
   position: relative;
   z-index: 1;
   display: flex;
@@ -758,12 +832,13 @@ main > *:not(.dot-field):not(.cursor-background) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 120px;
+  width: var(--wf-group);
   flex-shrink: 0;
+  scroll-snap-align: center;
 }
 
 .workflow-node {
-  width: 64px;
+  width: var(--wf-node);
   height: 52px;
   display: flex;
   align-items: center;
@@ -793,8 +868,9 @@ main > *:not(.dot-field):not(.cursor-background) {
 .workflow-connector {
   position: absolute;
   top: 26px;
-  left: 92px;
-  width: 56px;
+  /* runs from this node's right edge to the next node's left edge */
+  left: calc((var(--wf-group) + var(--wf-node)) / 2);
+  width: calc(var(--wf-group) - var(--wf-node));
   height: 1px;
   background: #555a60;
 }
@@ -988,10 +1064,16 @@ main > *:not(.dot-field):not(.cursor-background) {
     top: 0;
     left: 0;
     right: 0;
-    height: 78px;
     z-index: 200;
     grid-template-columns: auto auto;
     justify-content: space-between;
+  }
+
+  /* Without this the bar itself stays transparent while the panel is open,
+     letting page content show through behind the wordmark and the button. */
+  .site-nav-open {
+    background: #f3efe6;
+    border-color: var(--line);
   }
 
   .nav-cta {
@@ -1002,9 +1084,31 @@ main > *:not(.dot-field):not(.cursor-background) {
     display: block;
   }
 
+  .nav-scrim {
+    display: block;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 198;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: rgba(26, 29, 33, 0.28);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+  }
+
+  .nav-scrim-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .nav-links {
     position: fixed;
-    top: 78px;
+    top: var(--nav-h);
     left: 0;
     right: 0;
     z-index: 199;
@@ -1012,9 +1116,9 @@ main > *:not(.dot-field):not(.cursor-background) {
     flex-direction: column;
     gap: 0;
     padding: 0;
-    background: rgba(245, 241, 232, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    /* fully opaque: a translucent panel let the hero headline read through,
+       and it avoids a full-panel blur on low-end phones */
+    background: #f3efe6;
     border-bottom: 1px solid var(--line);
     box-shadow: 0 12px 40px rgba(26, 29, 33, 0.08);
     max-height: 0;
@@ -1022,6 +1126,8 @@ main > *:not(.dot-field):not(.cursor-background) {
     opacity: 0;
     transform: translateY(-8px);
     pointer-events: none;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     transition:
       max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
       opacity 0.28s ease,
@@ -1029,7 +1135,9 @@ main > *:not(.dot-field):not(.cursor-background) {
   }
 
   .nav-links-open {
-    max-height: 480px;
+    /* svh so the panel never runs under mobile browser chrome; scrolls in landscape */
+    max-height: calc(100svh - var(--nav-h));
+    overflow-y: auto;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -1039,12 +1147,14 @@ main > *:not(.dot-field):not(.cursor-background) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px clamp(22px, 5vw, 32px);
+    min-height: 54px;
+    padding: 14px max(clamp(22px, 5vw, 32px), env(safe-area-inset-left));
     font-size: 17px;
     font-weight: 500;
     color: var(--foreground);
     border-bottom: 1px solid var(--line);
     transition: background 0.15s ease, color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .nav-links a::after {
@@ -1054,14 +1164,55 @@ main > *:not(.dot-field):not(.cursor-background) {
     transition: transform 0.18s ease;
   }
 
-  .nav-links a:hover {
-    background: rgba(222, 91, 56, 0.06);
+  @media (hover: hover) {
+    .nav-links a:hover {
+      background: rgba(222, 91, 56, 0.06);
+      color: var(--accent-deep);
+    }
+
+    .nav-links a:hover::after {
+      transform: translateX(3px);
+      color: var(--accent-deep);
+    }
+  }
+
+  /* Touch has no hover to clear, so press feedback goes on :active instead */
+  .nav-links a:active,
+  .nav-links a:focus-visible {
+    background: rgba(222, 91, 56, 0.09);
     color: var(--accent-deep);
   }
 
-  .nav-links a:hover::after {
+  .nav-links a:active::after,
+  .nav-links a:focus-visible::after {
     transform: translateX(3px);
     color: var(--accent-deep);
+  }
+
+  /* The desktop CTA is hidden up here, so the panel carries its own */
+  .nav-links .nav-panel-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 0 18px;
+    margin: 18px max(clamp(22px, 5vw, 32px), env(safe-area-inset-left));
+    margin-bottom: calc(20px + env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 999px;
+    background: var(--foreground);
+    color: var(--soft-ink);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .nav-links .nav-panel-cta::after {
+    content: none;
+  }
+
+  .nav-links .nav-panel-cta:active {
+    background: var(--accent-deep);
+    color: var(--soft-ink);
   }
 
   .hero,
@@ -1074,12 +1225,12 @@ main > *:not(.dot-field):not(.cursor-background) {
   }
 
   .build-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero {
     min-height: auto;
-    padding-top: 150px;
+    padding-top: calc(var(--nav-h) + 72px);
     padding-bottom: 40px;
   }
 
@@ -1117,12 +1268,9 @@ main > *:not(.dot-field):not(.cursor-background) {
 }
 
 @media (max-width: 640px) {
-  .site-nav {
-    height: 68px;
-  }
-
-  .nav-links {
-    top: 68px;
+  :root {
+    /* .site-nav, .nav-links and .nav-scrim all key off this */
+    --nav-h: 68px;
   }
 
   .hero-actions,
@@ -1193,6 +1341,71 @@ main > *:not(.dot-field):not(.cursor-background) {
   .principle-item {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+
+  .builds {
+    padding-top: 64px;
+    padding-bottom: 72px;
+  }
+
+  .build-grid {
+    gap: 14px;
+  }
+
+  .build-card {
+    min-height: 0;
+    padding: 22px 20px 24px;
+  }
+
+  /* 34px min from the desktop clamp overflows a 375px viewport */
+  .build-card h3 {
+    margin-top: 14px;
+    font-size: clamp(25px, 7.2vw, 34px);
+  }
+
+  .build-card p {
+    margin-top: 14px;
+    font-size: 15px;
+  }
+
+  .build-card a {
+    margin-top: 20px;
+  }
+
+  .build-workflow-wrap {
+    margin-top: 24px;
+  }
+
+  .build-workflow-canvas {
+    height: 250px;
+  }
+
+  .workflow-scroll-hint {
+    display: block;
+    margin-top: 10px;
+    color: rgba(247, 243, 235, 0.5);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .workflow-flow {
+    /* tighter steps fit ~3.5 nodes on screen instead of 3 */
+    --wf-group: 100px;
+    --wf-node: 58px;
+    padding: 64px 16px 0;
+  }
+
+  /* wrapping keeps long step names inside the narrower group */
+  .workflow-node-title {
+    margin-top: 9px;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .workflow-subnodes {
+    top: 98px;
   }
 }
 
