@@ -967,6 +967,7 @@ main > *:not(.dot-field):not(.cursor-background) {
   .site-nav {
     grid-template-columns: auto auto;
     justify-content: space-between;
+    position: fixed;
   }
 
   .nav-cta {
@@ -979,7 +980,7 @@ main > *:not(.dot-field):not(.cursor-background) {
 
   .nav-links {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 78px;
     left: 0;
     right: 0;
@@ -1003,11 +1004,11 @@ main > *:not(.dot-field):not(.cursor-background) {
     grid-template-columns: 1fr;
   }
 
-  .hero {
-    min-height: auto;
-    padding-top: 118px;
-    padding-bottom: 40px;
-  }
+.hero {
+  min-height: auto;
+  padding-top: 150px;
+  padding-bottom: 40px;
+}
 
   .story-constellation {
     min-height: 420px;
