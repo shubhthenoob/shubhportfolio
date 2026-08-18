@@ -6,6 +6,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://shubhradia.vercel.a
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: '/self-confidence.png',
+    apple: '/self-confidence.png',
+  },
   title: {
     default: 'Shubh Radia - Product Manager in India',
     template: '%s | Shubh Radia',
