@@ -108,8 +108,7 @@ const builds = [
     title: 'Turn a noisy internet into useful reading.',
     copy:
       'A lightweight workflow that collects, filters, and delivers ideas worth attention instead of forwarding raw noise.',
-    workflowSteps: ['Collect sources', 'Filter new articles', 'AI analysis and ranking', 'Build and send'],
-    href: '#workflow',
+    workflowSteps: [      'Normalize & Dedupe',  'Filter New Articles',  'Analyze Articles',  'Rank & Select',  'Build Newsletter',  'Send Newsletter',  'Prepare Records',  'Record Processed Article', ],    href: '#workflow',
     cta: 'Ask about the workflow',
     opensWorkflow: true,
   },
@@ -118,7 +117,7 @@ const builds = [
     title: 'Turn rushed English into polished professional writing.',
     copy:
       'An AI writing assistant that rewrites broken, rushed, or fast English into clearer professional communication without changing the original meaning.',
-    href: 'https://chromewebstore.google.com/detail/corporatify/ghaffcefiiohmdkknikbbgfnghkilond',
+    href: 'https://chromewebstore.google.com/detail/corporatify/mkhblilbfelnokifpjjmdplonolmldhm',
     cta: 'View Corporatify',
     opensWorkflow: false,
   },
@@ -591,15 +590,39 @@ export default function Home() {
               <h3>{build.title}</h3>
               <p>{build.copy}</p>
               {'workflowSteps' in build && build.workflowSteps ? (
-                <div className="build-workflow" aria-label="Workflow summary">
-                  {build.workflowSteps.map((step, index) => (
-                    <span key={step}>
-                      {step}
-                      {index < build.workflowSteps.length - 1 ? <i>→</i> : null}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
+  <div className="build-workflow-canvas">
+    <div className="workflow-grid" />
+
+    <div className="workflow-flow">
+      {build.workflowSteps.map((step, index) => (
+        <div key={step} className="workflow-group">
+          <div className="workflow-node">
+            <div className="workflow-node-icon">
+              {step === 'Send Newsletter' ? '✉' :
+               step === 'Record Processed Article' ? '▦' :
+               step === 'Analyze Articles' ? '☷' : '{}'}
+            </div>
+          </div>
+
+          <span className="workflow-node-title">
+            {step}
+          </span>
+
+          {step === 'Analyze Articles' && (
+            <div className="workflow-subnodes">
+              <span>Model</span>
+              <span>Output Parser</span>
+            </div>
+          )}
+
+          {index < build.workflowSteps.length - 1 && (
+            <div className="workflow-connector" />
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+) : null}
               {build.opensWorkflow ? null : (
                 <a
                   className="build-link"

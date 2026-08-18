@@ -230,7 +230,7 @@ main > *:not(.dot-field):not(.cursor-background) {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 34px;
+  margin-top: 16px;
 }
 
 .secondary-link {
@@ -694,28 +694,119 @@ main > *:not(.dot-field):not(.cursor-background) {
   color: rgba(247, 243, 235, 0.74);
 }
 
-.build-workflow {
+.build-workflow-canvas {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin-top: 34px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: #111315;
+}
+
+.workflow-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.12) 0.7px,
+    transparent 0.7px
+  );
+  background-size: 12px 12px;
+  opacity: 0.45;
+}
+
+.workflow-flow {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px 8px;
-  margin-top: 18px;
+  align-items: flex-start;
+  width: max-content;
+  min-width: max-content;
+  padding: 95px 35px 0;
 }
 
-.build-workflow span {
-  display: inline-flex;
+.workflow-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  color: rgba(247, 243, 235, 0.88);
-  font-size: 12px;
-  line-height: 1;
+  width: 120px;
+  flex-shrink: 0;
 }
 
-.build-workflow i {
-  font-style: normal;
-  color: rgba(247, 243, 235, 0.4);
+.workflow-node {
+  width: 64px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #41454a;
+  border-radius: 6px;
+  background: #1b1e21;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.workflow-node-icon {
+  color: #f2a05f;
+  font-family: monospace;
+  font-size: 22px;
+}
+
+.workflow-node-title {
+  margin-top: 10px;
+  color: #f4f1eb;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.workflow-connector {
+  position: absolute;
+  top: 26px;
+  left: 92px;
+  width: 56px;
+  height: 1px;
+  background: #555a60;
+}
+
+.workflow-connector::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid #777;
+  border-right: 1px solid #777;
+  transform: rotate(45deg);
+}
+
+.workflow-subnodes {
+  position: absolute;
+  top: 72px;
+  display: flex;
+  gap: 8px;
+  color: #777d84;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.workflow-subnodes span {
+  padding: 4px 6px;
+  border: 1px solid #34383c;
+  border-radius: 4px;
+  background: #17191b;
+}
+.build-workflow-canvas {
+  height: 280px;
+}
+
+.workflow-flow {
+  padding: 85px 25px 0;
 }
 
 .build-card a {
@@ -1003,7 +1094,35 @@ main > *:not(.dot-field):not(.cursor-background) {
     right: 6%;
     bottom: 8%;
     max-width: none;
-  }
+  }.story-constellation {
+  min-height: 620px;
+}
+
+.constellation-card-a {
+  top: 8%;
+  left: 8%;
+}
+
+.constellation-card-b {
+  top: 32%;
+  left: 8%;
+}
+
+.constellation-card-c {
+  top: 56%;
+  right: 8%;
+}
+
+.constellation-center {
+  left: 8%;
+  right: 8%;
+  bottom: 7%;
+  max-width: none;
+}
+
+.constellation-svg {
+  display: none;
+}
 
   .project,
   .build-card,
