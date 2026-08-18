@@ -88,6 +88,12 @@ const journey = [
       'Got an early education in ownership, customers, sales, and what it means to make something real enough that people pay for it.',
   },
   {
+    year: '2023',
+    title: 'Founder's Office Intern, CitJo',
+    copy:
+      'Basically did everything from bringing coffee to being part of investor meeting.',
+  },
+  {
     year: '2021-2025',
     title: 'Computer Engineering, K.J. Somaiya College',
     copy:
