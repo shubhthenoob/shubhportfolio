@@ -108,7 +108,8 @@ const builds = [
     title: 'Turn a noisy internet into useful reading.',
     copy:
       'A lightweight workflow that collects, filters, and delivers ideas worth attention instead of forwarding raw noise.',
-    workflowSteps: [      'Normalize & Dedupe',  'Filter New Articles',  'Analyze Articles',  'Rank & Select',  'Build Newsletter',  'Send Newsletter',  'Prepare Records',  'Record Processed Article', ],    href: '#workflow',
+    workflowSteps: ['Collect RSS feeds', 'Normalize & Dedupe', 'Filter New Articles', 'Analyze Articles', 'Rank & Select', 'Build Newsletter', 'Send Newsletter', 'Prepare Records', 'Record Processed Article'],
+    href: '#workflow',
     cta: 'Ask about the workflow',
     opensWorkflow: true,
   },
