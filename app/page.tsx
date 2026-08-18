@@ -481,8 +481,8 @@ export default function Home() {
 
       <section className="hero section-pad" id="top">
         <div className="hero-copy">
-          <p className="eyebrow">PRODUCT MANAGER / BUILDER</p>
           <h1>
+            <span className="hero-kicker">Shubh Radia — Product Manager &amp; Builder</span>
             Connecting the dots
             <br />
             <em>between complexity and clarity.</em>
