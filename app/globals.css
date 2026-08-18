@@ -185,19 +185,42 @@ main > *:not(.dot-field):not(.cursor-background) {
   font-size: 13px;
 }
 
+/* NEW */
 .menu-button {
   display: none;
   width: 34px;
+  height: 34px;
   border: 0;
   background: transparent;
-  padding: 4px 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
 }
 
 .menu-button span {
   display: block;
-  height: 1px;
-  margin: 6px 0;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
   background: var(--foreground);
+  border-radius: 2px;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-button span:first-child { top: 10px; }
+.menu-button span:last-child  { top: 22px; }
+
+.menu-button[aria-expanded="true"] span:first-child {
+  top: 16px;
+  transform: rotate(45deg);
+}
+
+.menu-button[aria-expanded="true"] span:last-child {
+  top: 16px;
+  transform: rotate(-45deg);
 }
 
 .hero {
@@ -965,12 +988,15 @@ main > *:not(.dot-field):not(.cursor-background) {
 
 
  @media (max-width: 980px) {
-  .site-nav {
-    position: sticky;
-    top: 0;
-    grid-template-columns: auto auto;
-    justify-content: space-between;
-  }
+ .site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+}
 
   .nav-cta {
     display: none;
@@ -980,26 +1006,68 @@ main > *:not(.dot-field):not(.cursor-background) {
     display: block;
   }
 
- .nav-links {
-  display: none;
+ /* NEW */
+.nav-links {
   position: absolute;
-  top: 78px;
+  top: 100%;
   left: 0;
   right: 0;
+  display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px 22px 24px;
-  background: rgba(245, 241, 232, 0.96);
+  gap: 0;
+  padding: 0;
+  background: rgba(245, 241, 232, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--line);
-}
-.site-nav:has(.nav-links-open) {
-  height: auto;
-  min-height: 78px;
+  box-shadow: 0 12px 40px rgba(26, 29, 33, 0.08);
+
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition:
+    max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.28s ease,
+    transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-  .nav-links-open {
-    display: flex;
-  }
+.nav-links-open {
+  max-height: 480px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px clamp(22px, 5vw, 32px);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--foreground);
+  border-bottom: 1px solid var(--line);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-links a::after {
+  content: '→';
+  font-size: 13px;
+  color: var(--muted);
+  transition: transform 0.18s ease;
+}
+
+.nav-links a:hover {
+  background: rgba(222, 91, 56, 0.06);
+  color: var(--accent-deep);
+}
+
+.nav-links a:hover::after {
+  transform: translateX(3px);
+  color: var(--accent-deep);
+}
 
   .hero,
   .resume,
