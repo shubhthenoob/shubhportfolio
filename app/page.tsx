@@ -726,9 +726,6 @@ export default function Home() {
           SHUBH <span>RADIA</span>
         </a>
         <p>Designed around the same idea that shapes the work: connect the dots, then make them easier to use.</p>
-        <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">
-          LinkedIn
-        </a>
       </footer>
     </main>
   )
