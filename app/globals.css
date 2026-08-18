@@ -1352,6 +1352,8 @@ main > * {
   :root {
     /* .site-nav, .nav-links and .nav-scrim all key off this */
     --nav-h: 68px;
+    /* .story-constellation gap and the connector height it draws into it */
+    --constellation-gap: 28px;
   }
 
   .hero-actions,
@@ -1368,41 +1370,46 @@ main > * {
     width: 100%;
   }
 
+  .hero {
+    padding-top: calc(var(--nav-h) + 44px);
+    padding-bottom: 32px;
+  }
+
+  /* mobile drops the absolute layout: the cards stack in flow order and the
+     connectors are drawn in the flex gap, so the % based svg is not usable */
   .story-constellation {
-    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--constellation-gap);
+    min-height: 0;
+    padding: 22px 20px;
+    border-radius: 26px;
   }
 
-  .constellation-card {
-    width: auto;
-    max-width: none;
-    padding: 14px;
-  }
-
-  .constellation-card-a {
-    top: 8%;
-    left: 8%;
-  }
-
-  .constellation-card-b {
-    top: 32%;
-    bottom: auto;
-    left: 8%;
-    transform: none;
-  }
-
-  .constellation-card-c {
-    top: 56%;
-    right: 8%;
-  }
-
+  .constellation-card,
   .constellation-center {
-    top: auto;
-    left: 8%;
-    right: 8%;
-    bottom: 7%;
+    position: relative;
+    inset: auto;
     width: auto;
     max-width: none;
     transform: none;
+    padding: 16px 18px;
+  }
+
+  /* dashed rail sitting in the gap under each card, same 6/8 rhythm as the svg */
+  .constellation-card::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 26px;
+    width: 1.4px;
+    height: var(--constellation-gap);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--accent) 0 6px,
+      transparent 6px 14px
+    );
+    opacity: 0.65;
   }
 
   .constellation-svg {
