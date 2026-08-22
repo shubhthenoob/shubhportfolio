@@ -133,6 +133,15 @@ const builds = [
     cta: 'View Corporatify',
     opensWorkflow: false,
   },
+  {
+    label: 'Best Coat Solutions website',
+    title: 'Give an industrial coatings business a single-point-of-contact online presence.',
+    copy:
+      'A business website for an industrial surface protection company, built to make its coating, flooring, and waterproofing services easy for plant and facility teams to evaluate and enquire about.',
+    href: 'https://www.bestcoatsolutions.in/',
+    cta: 'View Best Coat Solutions',
+    opensWorkflow: false,
+  },
 ]
 
 const resumeGroups = [
