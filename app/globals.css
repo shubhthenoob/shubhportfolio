@@ -998,6 +998,54 @@ main > * {
   background: rgba(255, 255, 255, 0.14);
 }
 
+.build-card .build-preview {
+  display: block;
+  margin-top: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: #111315;
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+}
+
+.build-preview:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.build-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #17191b;
+}
+
+.build-preview-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.build-preview-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.build-preview-url {
+  color: rgba(247, 243, 235, 0.5);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.build-preview-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .build-card a {
   margin-top: 24px;
   color: var(--soft-ink);

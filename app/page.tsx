@@ -138,6 +138,8 @@ const builds = [
     title: 'Give an industrial coatings business a single-point-of-contact online presence.',
     copy:
       'A business website for an industrial surface protection company, built to make its coating, flooring, and waterproofing services easy for plant and facility teams to evaluate and enquire about.',
+    image: '/best-coat-preview.jpg',
+    imageAlt: 'Best Coat Solutions homepage hero section',
     href: 'https://www.bestcoatsolutions.in/',
     cta: 'View Best Coat Solutions',
     opensWorkflow: false,
@@ -732,6 +734,29 @@ export default function Home() {
                     <p className="build-example-text">{build.example.after}</p>
                   </div>
                 </div>
+              ) : null}
+              {'image' in build && build.image ? (
+                <a
+                  className="build-preview"
+                  href={build.href}
+                  target={build.href.startsWith('http') ? '_blank' : undefined}
+                  rel={build.href.startsWith('http') ? 'noreferrer' : undefined}
+                >
+                  <div className="build-preview-bar">
+                    <span className="build-preview-dots">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span className="build-preview-url">bestcoatsolutions.in</span>
+                  </div>
+                  <img
+                    className="build-preview-img"
+                    src={build.image}
+                    alt={build.imageAlt ?? ''}
+                    loading="lazy"
+                  />
+                </a>
               ) : null}
               {build.opensWorkflow ? null : (
                 <a
