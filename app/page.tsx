@@ -66,6 +66,24 @@ const projects = [
     tags: ['Adoption', '3PL / 4PL', 'User flows'],
     visual: 'operations',
   },
+  {
+    company: 'Side project',
+    eyebrow: 'Gather / Chrome extension',
+    title: 'Built Gather, a free Chrome extension that saves your web highlights and makes them easy to find later.',
+    summary:
+      'Highlight text on any website, add a note, and Gather keeps it in one searchable library, grouped by day and by site.',
+    problem:
+      'People who read a lot online lose the lines that matter. Bookmarks save whole pages, not the passage or the thought you had while reading it.',
+    role: 'Owned the product end to end: who it is for, scope, UX, building it, and launch.',
+    action:
+      'Shipped one-click highlights that reappear when you return to a page, notes, colour categories, a side panel (Alt+G), search across everything, copying with the source attached, and Markdown export. It is private by default and needs no account.',
+    outcome:
+      'Published on the Chrome Web Store, with its own landing page and SEO blog.',
+    tags: ['Chrome extension', '0 → 1', 'Consumer product'],
+    visual: 'highlighter',
+    link: 'https://gatherme.vercel.app',
+    store: 'https://chromewebstore.google.com/detail/gather-highlight-save-cat/mjnohkfaifggignaafjmdkhcncloogho',
+  },
 ]
 
 const journey = [
@@ -334,6 +352,20 @@ function StoryConstellation() {
 }
 
 function ProjectVisual({ type }: { type: string }) {
+  if (type === 'highlighter') {
+    return (
+      <div className="project-visual visual-procurement" aria-hidden="true">
+        <div className="form-card">
+          <span>Gather / Library</span>
+          <b>Keep what matters.</b>
+          <div className="fake-input">Search your highlights…</div>
+          <div className="fake-input">Today · Research · 3 highlights</div>
+          <div className="fake-button">Save highlight</div>
+        </div>
+      </div>
+    )
+  }
+
   if (type === 'operations') {
     return (
       <div className="project-visual visual-operations" aria-hidden="true">
@@ -614,6 +646,16 @@ export default function Home() {
                     <span key={tag}>{tag}</span>
                   ))}
                 </div>
+                {'link' in project && project.link && (
+                  <a className="project-link" href={project.link} target="_blank" rel="noopener noreferrer">
+                    Visit live ↗
+                  </a>
+                )}
+                {'store' in project && project.store && (
+                  <a className="project-link" href={project.store} target="_blank" rel="noopener noreferrer">
+                    Chrome Web Store ↗
+                  </a>
+                )}
               </div>
             </article>
           ))}
