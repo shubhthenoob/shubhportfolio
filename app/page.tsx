@@ -66,24 +66,6 @@ const projects = [
     tags: ['Adoption', '3PL / 4PL', 'User flows'],
     visual: 'operations',
   },
-  {
-    company: 'Side project',
-    eyebrow: 'Gather / Chrome extension',
-    title: 'Built Gather, a free Chrome extension that saves your web highlights and makes them easy to find later.',
-    summary:
-      'Highlight text on any website, add a note, and Gather keeps it in one searchable library, grouped by day and by site.',
-    problem:
-      'People who read a lot online lose the lines that matter. Bookmarks save whole pages, not the passage or the thought you had while reading it.',
-    role: 'Owned the product end to end: who it is for, scope, UX, building it, and launch.',
-    action:
-      'Shipped one-click highlights that reappear when you return to a page, notes, colour categories, a side panel (Alt+G), search across everything, copying with the source attached, and Markdown export. It is private by default and needs no account.',
-    outcome:
-      'Published on the Chrome Web Store, with its own landing page and SEO blog.',
-    tags: ['Chrome extension', '0 → 1', 'Consumer product'],
-    visual: 'highlighter',
-    link: 'https://gatherme.vercel.app',
-    store: 'https://chromewebstore.google.com/detail/gather-highlight-save-cat/mjnohkfaifggignaafjmdkhcncloogho',
-  },
 ]
 
 const journey = [
@@ -152,12 +134,25 @@ const builds = [
     opensWorkflow: false,
   },
   {
+    label: 'Gather Chrome extension',
+    title: 'Keep the lines that matter from everything you read online, and find them later.',
+    copy:
+      'A free Chrome extension for highlighting text on any website, adding notes and colour categories, and searching everything from one library grouped by day and site. Private by default, no account needed.',
+    image: '/gather-preview.jpg',
+    imageAlt: 'Gather landing page hero section',
+    previewUrl: 'gatherme.vercel.app',
+    href: 'https://chromewebstore.google.com/detail/gather-highlight-save-cat/mjnohkfaifggignaafjmdkhcncloogho',
+    cta: 'View Gather',
+    opensWorkflow: false,
+  },
+  {
     label: 'Best Coat Solutions website',
     title: 'Give an industrial coatings business a single-point-of-contact online presence.',
     copy:
       'A business website for an industrial surface protection company, built to make its coating, flooring, and waterproofing services easy for plant and facility teams to evaluate and enquire about.',
     image: '/best-coat-preview.jpg',
     imageAlt: 'Best Coat Solutions homepage hero section',
+    previewUrl: 'bestcoatsolutions.in',
     href: 'https://www.bestcoatsolutions.in/',
     cta: 'View Best Coat Solutions',
     opensWorkflow: false,
@@ -352,20 +347,6 @@ function StoryConstellation() {
 }
 
 function ProjectVisual({ type }: { type: string }) {
-  if (type === 'highlighter') {
-    return (
-      <div className="project-visual visual-procurement" aria-hidden="true">
-        <div className="form-card">
-          <span>Gather / Library</span>
-          <b>Keep what matters.</b>
-          <div className="fake-input">Search your highlights…</div>
-          <div className="fake-input">Today · Research · 3 highlights</div>
-          <div className="fake-button">Save highlight</div>
-        </div>
-      </div>
-    )
-  }
-
   if (type === 'operations') {
     return (
       <div className="project-visual visual-operations" aria-hidden="true">
@@ -646,16 +627,6 @@ export default function Home() {
                     <span key={tag}>{tag}</span>
                   ))}
                 </div>
-                {'link' in project && project.link && (
-                  <a className="project-link" href={project.link} target="_blank" rel="noopener noreferrer">
-                    Visit live ↗
-                  </a>
-                )}
-                {'store' in project && project.store && (
-                  <a className="project-link" href={project.store} target="_blank" rel="noopener noreferrer">
-                    Chrome Web Store ↗
-                  </a>
-                )}
               </div>
             </article>
           ))}
@@ -790,7 +761,7 @@ export default function Home() {
                       <i />
                       <i />
                     </span>
-                    <span className="build-preview-url">bestcoatsolutions.in</span>
+                    <span className="build-preview-url">{'previewUrl' in build ? build.previewUrl : ''}</span>
                   </div>
                   <img
                     className="build-preview-img"
